@@ -9,6 +9,8 @@ from giving import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'charities', views.CharityViewSet)
+
 
 urlpatterns = [
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
