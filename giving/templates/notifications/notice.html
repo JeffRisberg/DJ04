@@ -1,0 +1,31 @@
+<div class="alert alert-block alert-{{ notice.level }}">
+    <a class="close pull-right" href="{% url 'notifications:mark_as_read' notice.slug %}">
+        <i class="icon-close"></i>
+    </a>
+
+    <div style="margin-top: 20px;">
+    <span style="font-weight: bold">
+    <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i>
+    {{ notice.actor }}
+    {{ notice.verb }}
+    {% if notice.target %}
+      of {{ notice.target }}
+    {% endif %}
+  </span>
+        ({{ notice.timesince }} ago)
+    </div>
+
+    <p>{{ notice.description|linebreaksbr }}</p>
+
+    <p>Unread: {{ notice.unread }}</p>
+
+    {% if notice.unread %}
+    <a href="/inbox/notifications/mark-as-read/{{notice.slug}}">Read It</a>
+    {% endif %}
+
+    <div class="notice-actions">
+        {% for action in notice.data.actions %}
+        <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
+        {% endfor %}
+    </div>
+</div>

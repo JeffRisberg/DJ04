@@ -1,0 +1,32 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+{{ block.super }} - New Donation
+{% endblock %}
+
+{% block content %}
+<form action="/giving/newDonation" method="POST">{% csrf_token %}
+
+    <h2>New Donation Form</h2>
+
+    <div>
+        Charity:
+        <select name="charity">
+            {% for charity in charity_list %}
+
+            <option value="{{ charity.id }}">{{ charity.name }}</option>
+
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        Amount:
+        <input type="text" name="amount"/>
+    </div>
+
+    <div>
+        <input type="submit"/>
+    </div>
+</form>
+{% endblock %}
