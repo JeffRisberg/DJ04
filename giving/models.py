@@ -1,6 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from . import query
+
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = query.BaseQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+
 class Charity(models.Model):
     name = models.CharField(max_length=31)
     slug = models.SlugField()
@@ -31,7 +43,7 @@ class Donor(models.Model):
         return self.first_name + " " + self.last_name
 
 
-class Donation(models.Model):
+class Donation(BaseModel):
     donor = models.ForeignKey(User)
     charity = models.ForeignKey(Charity)
     amount = models.IntegerField()

@@ -9,7 +9,7 @@ from notifications.signals import notify
 
 from django.contrib.auth.models import User, Group
 from .models import Charity, Donor, Donation
-from .serializers import UserSerializer, GroupSerializer, CharitySerializer
+from .serializers import UserSerializer, GroupSerializer, CharitySerializer, DonationSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -34,6 +34,14 @@ class CharityViewSet(viewsets.ModelViewSet):
     """
     queryset = Charity.objects.all()
     serializer_class = CharitySerializer
+
+
+class DonationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows donatins to be viewed or edited.
+    """
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
 
 
 def index(request):
