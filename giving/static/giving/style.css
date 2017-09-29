@@ -1,7 +1,4 @@
-body {
-    background: white url("images/background.jpg") no-repeat right top;
-}
-
-li a {
-    color: green;
+footer {
+    background: #C0C0C0;
+    padding: 8px;
 }

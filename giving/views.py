@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
 
 from rest_framework import viewsets
+from rest_framework.views import APIView
 
 from notifications.signals import notify
 
@@ -91,7 +92,7 @@ def donation_list_view(request):
     return HttpResponse(output)
 
 
-def new_donation_view(request):
+def donation_new_view(request):
     c = {}
     c.update(csrf(request))
     user = getattr(request, "user", None)
@@ -112,4 +113,4 @@ def new_donation_view(request):
 
     charity_list = Charity.objects.all()
     c.update({'charity_list': charity_list})
-    return render_to_response("giving/new_donation.html", c)
+    return render_to_response("giving/donation_new.html", c)

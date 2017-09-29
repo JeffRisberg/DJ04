@@ -5,10 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<img src="/static/giving/images/background.jpg" />
-
 <h2>Charity List</h2>
-<table>
+<table class="table">
     <tr>
         <th>Name</th>
         <th>Founded</th>
@@ -18,7 +16,7 @@
     {% for charity in charity_list %}
     <tr>
         <td>
-            <a href="">
+            <a href="/charity/{{ charity.slug }}">
                 {{ charity.name }}
             </a>
         </td>
@@ -34,7 +32,7 @@
     </tr>
     {% empty %}
     <tr>
-        <td><em>There are currently no Charities available.</em></td>
+        <td colspan="999"><em>There are currently no Charities available.</em></td>
     </tr>
     {% endfor %}
 </table>

@@ -5,10 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<img src="/static/giving/images/background.jpg" />
-
 <h2>Donor List</h2>
-<table>
+    <table class="table">
     <tr>
         <th>First Name</th>
         <th>Last Name</th>
@@ -26,7 +24,7 @@
     </tr>
     {% empty %}
     <tr>
-        <td><em>There are currently no Donors available.</em></td>
+        <td colspan="999"><em>There are currently no Donors available.</em></td>
     </tr>
     {% endfor %}
 </table>

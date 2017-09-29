@@ -1,41 +1,35 @@
 {% extends parent_template|default:"base.html" %}
 
 {% block title %}
-{{ block.super }} - Donation List
+    {{ block.super }} - Donation List
 {% endblock %}
 
 {% block content %}
-<img src="/static/giving/images/background.jpg"/>
+    <h2>Donation List</h2>
+    <table class="table">
+        <tr>
+            <th>Donor</th>
+            <th>Charity</th>
+            <th style="text-align: right">Amount</th>
+        </tr>
+        {% for donation in donation_list %}
+            <tr>
+                <td>
+                    {{ donation.donor }}
+                </td>
+                <td>
+                    {{ donation.charity }}
+                </td>
+                <td style="text-align: right">
+                    {{ donation.amount }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="999"><em>There are currently no Donations recorded.</em></td>
+            </tr>
+        {% endfor %}
+    </table>
 
-<h2>Donation List</h2>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Donor</th>
-        <th>Charity</th>
-        <th>Amount</th>
-    </tr>
-    {% for donation in donation_list %}
-    <tr>
-        <td>
-            {{ donation.created_at }}
-        </td>
-        <td>
-            {{ donation.donor }}
-        </td>
-        <td>
-            {{ donation.charity }}
-        </td>
-        <td>
-            {{ donation.amount }}
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td><em>There are currently no Donations recorded.</em></td>
-    </tr>
-    {% endfor %}
-</table>
-
-<a href="/giving/newDonation">New Donation</a>
+    <a href="/giving/donationNew">New Donation</a>
 {% endblock %}
