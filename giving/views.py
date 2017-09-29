@@ -59,6 +59,14 @@ def charity_list_view(request):
     return HttpResponse(output)
 
 
+def charity_detail_view(request, slug):
+    charity = Charity.objects.get(slug__iexact=slug)
+    template = loader.get_template('giving/charity_detail.html')
+    context = Context({'charity': charity})
+    output = template.render(context)
+    return HttpResponse(output)
+
+
 def donor_list_view(request):
     donor_list = Donor.objects.all()
     template = loader.get_template('giving/donor_list.html')

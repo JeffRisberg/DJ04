@@ -1,0 +1,10 @@
+{% extends parent_template|default:"blog/base_blog.html" %}
+
+{% block title %}
+{{ block.super }} - {{ charity.name|title }}
+{% endblock %}
+
+{% block content %}
+<h2>{{ charity.name|title }}</h2>
+
+{% endblock %}
