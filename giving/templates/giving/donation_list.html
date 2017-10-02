@@ -8,12 +8,18 @@
     <h2>Donation List</h2>
     <table class="table">
         <tr>
+            <th>Action</th>
             <th>Donor</th>
             <th>Charity</th>
             <th style="text-align: right">Amount</th>
         </tr>
         {% for donation in donation_list %}
             <tr>
+                <td>
+                    <a href="/donation/{{ donation.id }}">
+                        View
+                    </a>
+                </td>
                 <td>
                     {{ donation.donor }}
                 </td>

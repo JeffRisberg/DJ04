@@ -1,0 +1,24 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+    {{ block.super }} - Donation
+{% endblock %}
+
+{% block content %}
+    <h2>Donation Detail</h2>
+
+    <table class="table">
+        <tr>
+            <td>Donor</td>
+            <td>{{ donation.donor }}</td>
+        </tr>
+        <tr>
+            <td>Charity</td>
+            <td>{{ donation.charity }}</td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td>{{ donation.amount }}</td>
+    </table>
+
+{% endblock %}
