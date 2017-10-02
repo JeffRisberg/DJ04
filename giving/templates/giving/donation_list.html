@@ -13,7 +13,7 @@
             <th>Charity</th>
             <th style="text-align: right">Amount</th>
         </tr>
-        {% for donation in donation_list %}
+        {% for donation in object_list %}
             <tr>
                 <td>
                     <a href="/donation/{{ donation.id }}">

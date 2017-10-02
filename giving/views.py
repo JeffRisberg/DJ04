@@ -2,7 +2,7 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -53,11 +53,8 @@ def index(request):
     return HttpResponse(output)
 
 
-class CharityListView(TemplateView):
-    template_name = 'giving/charity_list.html'
-
-    def get_context_data(self, **kwargs):
-        return {'charity_list': Charity.objects.all()}
+class CharityListView(ListView):
+    model = Charity
 
 
 class CharityDetailView(TemplateView):
@@ -67,18 +64,12 @@ class CharityDetailView(TemplateView):
         return {'charity': Charity.objects.get(slug__iexact=kwargs['slug'])}
 
 
-class DonorListView(TemplateView):
-    template_name = 'giving/donor_list.html'
-
-    def get_context_data(self, **kwargs):
-        return {'donor_list': Donor.objects.all()}
+class DonorListView(ListView):
+    model = Donor
 
 
-class DonationListView(TemplateView):
-    template_name = 'giving/donation_list.html'
-
-    def get_context_data(self, **kwargs):
-        return {'donation_list': Donation.objects.all()}
+class DonationListView(ListView):
+    model = Donation
 
 
 class DonationDetailView(TemplateView):
