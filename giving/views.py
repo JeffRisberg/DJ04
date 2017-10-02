@@ -53,12 +53,11 @@ def index(request):
     return HttpResponse(output)
 
 
-def charity_list_view(request):
-    charity_list = Charity.objects.all()
-    template = loader.get_template('giving/charity_list.html')
-    context = Context({'charity_list': charity_list})
-    output = template.render(context)
-    return HttpResponse(output)
+class CharityListView(TemplateView):
+    template_name = 'giving/charity_list.html'
+
+    def get_context_data(self, **kwargs):
+        return {'charity_list': Charity.objects.all()}
 
 
 class CharityDetailView(TemplateView):
@@ -68,20 +67,18 @@ class CharityDetailView(TemplateView):
         return {'charity': Charity.objects.get(slug__iexact=kwargs['slug'])}
 
 
-def donor_list_view(request):
-    donor_list = Donor.objects.all()
-    template = loader.get_template('giving/donor_list.html')
-    context = Context({'donor_list': donor_list})
-    output = template.render(context)
-    return HttpResponse(output)
+class DonorListView(TemplateView):
+    template_name = 'giving/donor_list.html'
+
+    def get_context_data(self, **kwargs):
+        return {'donor_list': Donor.objects.all()}
 
 
-def donation_list_view(request):
-    donation_list = Donation.objects.all()
-    template = loader.get_template('giving/donation_list.html')
-    context = Context({'donation_list': donation_list})
-    output = template.render(context)
-    return HttpResponse(output)
+class DonationListView(TemplateView):
+    template_name = 'giving/donation_list.html'
+
+    def get_context_data(self, **kwargs):
+        return {'donation_list': Donation.objects.all()}
 
 
 class DonationDetailView(TemplateView):
