@@ -4,14 +4,20 @@ from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
 from django.views.generic import TemplateView, ListView
 
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from rest_framework.views import APIView
 
-from notifications.signals import notify
+from rest_framework.generics import (
+    ListAPIView, RetrieveAPIView
+)
 
 from django.contrib.auth.models import User, Group
+
+from notifications.signals import notify
+from notifications.models import Notification
+
 from .models import Charity, Donor, Donation
-from .serializers import UserSerializer, GroupSerializer, CharitySerializer, DonationSerializer
+from .serializers import UserSerializer, GroupSerializer, CharitySerializer, DonationSerializer, NotificationSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -40,7 +46,7 @@ class CharityViewSet(viewsets.ModelViewSet):
 
 class DonationViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows donatins to be viewed or edited.
+    API endpoint that allows donations to be viewed or edited.
     """
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
@@ -101,3 +107,18 @@ def donation_new_view(request):
     charity_list = Charity.objects.all()
     c.update({'charity_list': charity_list})
     return render_to_response("giving/donation_new.html", c)
+
+
+class NotificationAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = NotificationSerializer
+
+    def get_object(self):
+        return Notification.objects.get(id=self.kwargs['pk'])
+
+
+class NotificationsAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
