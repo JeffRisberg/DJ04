@@ -122,3 +122,17 @@ class NotificationsAPIView(ListAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
 
+
+class DonationAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DonationSerializer
+
+    def get_object(self):
+        return Donation.objects.get(id=self.kwargs['pk'])
+
+
+class DonationsAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
+
