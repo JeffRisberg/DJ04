@@ -55,7 +55,6 @@ class TaggedObjectRelatedField(serializers.RelatedField):
     """
     A custom field to use for the `tagged_object` generic relationship.
     """
-
     def to_representation(self, value):
         """
         Serialize instances with specific serializer.
@@ -64,6 +63,8 @@ class TaggedObjectRelatedField(serializers.RelatedField):
             serializer = CharitySerializer(value)
         elif isinstance(value, Donor):
             serializer = DonorSerializer(value)
+        elif isinstance(value, Donation):
+            serializer = DonationSerializer(value)
         else:
             raise Exception('Unexpected type of tagged object')
 
