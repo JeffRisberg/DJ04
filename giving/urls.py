@@ -24,6 +24,10 @@ urlpatterns = [
         views.DonationsAPIView.as_view(),
         name='donations'),
 
+    url(r'^api/taggedItems/$',
+        views.TaggedItemsAPIView.as_view(),
+        name='taggedItems'),
+
     url(r'^charityList$', views.CharityListView.as_view(), name='charity_list_view'),
 
     url(r'^charity/(?P<slug>[\w\-]+)/$', views.CharityDetailView.as_view(), name='charity_detail_view'),

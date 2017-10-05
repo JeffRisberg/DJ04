@@ -16,8 +16,11 @@ from django.contrib.auth.models import User, Group
 from notifications.signals import notify
 from notifications.models import Notification
 
-from .models import Charity, Donor, Donation
-from .serializers import UserSerializer, GroupSerializer, CharitySerializer, DonationSerializer, NotificationSerializer
+from .models import TaggedItem, Charity, Donor, Donation
+from .serializers import \
+    UserSerializer, GroupSerializer, \
+    CharitySerializer, DonationSerializer, NotificationSerializer, \
+    TaggedItemSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -136,3 +139,8 @@ class DonationsAPIView(ListAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
 
+
+class TaggedItemsAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = TaggedItem.objects.all()
+    serializer_class = TaggedItemSerializer
