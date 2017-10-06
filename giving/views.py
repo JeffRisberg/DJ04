@@ -1,20 +1,19 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User, Group
 from django.core.context_processors import csrf
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import Context, loader
 from django.views.generic import TemplateView, ListView
-
-from rest_framework.permissions import IsAuthenticated
+from notifications.models import Notification
+from notifications.signals import notify
 from rest_framework import viewsets
-
 from rest_framework.generics import (
     ListAPIView, RetrieveAPIView
 )
+from rest_framework.permissions import IsAuthenticated
 
-from django.contrib.auth.models import User, Group
-
-from notifications.signals import notify
-from notifications.models import Notification
+from .utils import id2slug, slug2id
 
 from .models import TaggedItem, Charity, Donor, Donation
 from .serializers import \
@@ -60,6 +59,75 @@ def index(request):
     context = Context()
     output = template.render(context)
     return HttpResponse(output)
+
+
+class NotificationListView(ListView):
+    template_name = 'giving/notification_list.html'
+    model = Notification
+
+    def get_queryset(self):
+        mode = self.kwargs['mode'] or 'all'
+        if mode == 'unread':
+            return self.request.user.notifications.unread()
+        elif mode == 'read':
+            return self.request.user.notifications.read()
+        else:
+            return self.request.user.notifications.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(NotificationListView, self).get_context_data(**kwargs)
+        mode = self.kwargs['mode'] or 'all'
+        context['mode'] = mode
+        return context
+
+
+@login_required
+def notification_mark_as_read(request, slug=None):
+    id = slug2id(slug)
+
+    notification = get_object_or_404(
+        Notification, recipient=request.user, id=id)
+    notification.mark_as_read()
+
+    _next = request.GET.get('next')
+
+    if _next:
+        return redirect(_next)
+
+    return redirect('giving:notification_list_view_unread')
+
+
+@login_required
+def notification_mark_as_unread(request, slug=None):
+    id = slug2id(slug)
+
+    notification = get_object_or_404(
+        Notification, recipient=request.user, id=id)
+    notification.mark_as_unread()
+
+    _next = request.GET.get('next')
+
+    if _next:
+        return redirect(_next)
+
+    return redirect('giving:notification_list_view_unread')
+
+
+@login_required
+def notification_delete(request, slug=None):
+    _id = slug2id(slug)
+
+    notification = get_object_or_404(
+        Notification, recipient=request.user, id=_id)
+
+    notification.delete()
+
+    _next = request.GET.get('next')
+
+    if _next:
+        return redirect(_next)
+
+    return redirect('giving:notification_list_view_all')
 
 
 class CharityListView(ListView):
@@ -111,6 +179,10 @@ def donation_new_view(request):
     c.update({'charity_list': charity_list})
     return render_to_response("giving/donation_new.html", c)
 
+
+##############
+# API Views
+##############
 
 class NotificationAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)

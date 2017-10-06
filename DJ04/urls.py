@@ -4,13 +4,11 @@ from django.contrib import admin
 import notifications.urls
 
 from rest_framework import routers
-from giving import views
+from . import views
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'charities', views.CharityViewSet)
-router.register(r'donations', views.DonationViewSet)
 
 
 urlpatterns = [

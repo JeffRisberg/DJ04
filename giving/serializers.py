@@ -5,13 +5,30 @@ from rest_framework import serializers
 from .models import TaggedItem, Charity, Donor, Donation
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class ActorSerializer(serializers.RelatedField):
+    """
+        A custom field to use for the `tagged_object` generic relationship.
+        """
+    def to_representation(self, value):
+        """
+        Serialize instances with specific serializer.
+        """
+        if isinstance(value, User):
+            serializer = UserSerializer(value)
+        else:
+            raise Exception('Unexpected type of tagged object')
+
+        return serializer.data
+
+
+class NotificationSerializer(serializers.Serializer):
+    actor = ActorSerializer(read_only=True)
+
     class Meta:
         model = Notification
         fields = ('id',
-                  'timestamp', 'level', 'actor_content_type', 'actor_object_id',
-                  'verb', 'description',
-                  'target_content_type', 'target_object_id')
+                  'recipient', 'level', 'actor',
+                  'verb', 'description')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

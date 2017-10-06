@@ -1,0 +1,71 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+    {{ block.super }} - Your Notifications
+{% endblock %}
+
+{% block content %}
+    <h2>Your Notifications</h2>
+    <p>
+        {% if mode == 'all' %}
+            All
+        {% else %}
+            <a href="/giving/notificationList/all">All</a>
+        {% endif %}
+        |
+        {% if mode == 'read' %}
+            Read
+        {% else %}
+            <a href="/giving/notificationList/read">Read</a>
+        {% endif %}
+        |
+        {% if mode == 'unread' %}
+            Unread
+        {% else %}
+            <a href="/giving/notificationList/unread">Unread</a>
+        {% endif %}
+    </p>
+    <table class="table">
+        <tr>
+            <th>Action</th>
+            <th>When</th>
+            <th>Actor/Verb</th>
+            <th>Level</th>
+            <th>Description</th>
+        </tr>
+        {% for notification in object_list %}
+            <tr>
+                <td>
+                    {% if notification.unread %}
+                        <a href="/notificationList/mark-as-read/{{ notification.slug }}">Read It</a>
+                    {% else %}
+                        <a href="/notificationList/mark-as-unread/{{ notification.slug }}">Unread It</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ notification.timesince }} ago
+                </td>
+                <td>
+                    {{ notification.actor }}
+                    {{ notification.verb }}
+                    {% if notification.target %}
+                        of {{ notification.target }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ notification.level }}
+                </td>
+                <td>
+                    {{ notification.description|linebreaksbr }}
+                </td>
+                <td>
+                    <a href="/notificationList/delete/{{ notification.slug }}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="999"><em>There are currently no Notifications.</em></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
