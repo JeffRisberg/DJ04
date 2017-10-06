@@ -4,7 +4,9 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import Context, loader
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, RedirectView
+from django.utils.decorators import method_decorator
+
 from notifications.models import Notification
 from notifications.signals import notify
 from rest_framework import viewsets
@@ -81,53 +83,73 @@ class NotificationListView(ListView):
         return context
 
 
-@login_required
-def notification_mark_as_read(request, slug=None):
-    id = slug2id(slug)
+class NotificationListViewMarkAsRead(RedirectView):
+    permanent = False
 
-    notification = get_object_or_404(
-        Notification, recipient=request.user, id=id)
-    notification.mark_as_read()
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NotificationListViewMarkAsRead, self).dispatch(*args, **kwargs)
 
-    _next = request.GET.get('next')
+    def get_redirect_url(self, *args, **kwargs):
+        id = slug2id(kwargs['slug'])
 
-    if _next:
-        return redirect(_next)
+        notification = get_object_or_404(Notification, recipient=self.request.user, id=id)
+        notification.mark_as_read()
 
-    return redirect('giving:notification_list_view_unread')
+        _next = self.request.GET.get('next')
 
+        if _next:
+            self.url = _next
+        else:
+            self.url = '/giving/notificationList/all'
 
-@login_required
-def notification_mark_as_unread(request, slug=None):
-    id = slug2id(slug)
-
-    notification = get_object_or_404(
-        Notification, recipient=request.user, id=id)
-    notification.mark_as_unread()
-
-    _next = request.GET.get('next')
-
-    if _next:
-        return redirect(_next)
-
-    return redirect('giving:notification_list_view_unread')
+        return super(NotificationListViewMarkAsRead, self).get_redirect_url(*args, **kwargs)
 
 
-@login_required
-def notification_delete(request, slug=None):
-    _id = slug2id(slug)
+class NotificationListViewMarkAsUnread(RedirectView):
+    permanent = False
 
-    notification = get_object_or_404(
-        Notification, recipient=request.user, id=_id)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NotificationListViewMarkAsUnread, self).dispatch(*args, **kwargs)
 
-    notification.delete()
+    def get_redirect_url(self, *args, **kwargs):
+        id = slug2id(kwargs['slug'])
 
-    _next = request.GET.get('next')
+        notification = get_object_or_404(Notification, recipient=self.request.user, id=id)
+        notification.mark_as_unread()
 
-    if _next:
-        return redirect(_next)
+        _next = self.request.GET.get('next')
 
-    return redirect('giving:notification_list_view_all')
+        if _next:
+            self.url = _next
+        else:
+            self.url = '/giving/notificationList/all'
+
+        return super(NotificationListViewMarkAsUnread, self).get_redirect_url(*args, **kwargs)
+
+
+class NotificationListViewDelete(RedirectView):
+    permanent = False
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NotificationListViewDelete, self).dispatch(*args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        id = slug2id(kwargs['slug'])
+
+        notification = get_object_or_404(Notification, recipient=self.request.user, id=id)
+        notification.delete()
+
+        _next = self.request.GET.get('next')
+
+        if _next:
+            self.url = _next
+        else:
+            self.url = '/giving/notificationList/all'
+
+        return super(NotificationListViewDelete, self).get_redirect_url(*args, **kwargs)
 
 
 class CharityListView(ListView):

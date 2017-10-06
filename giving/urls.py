@@ -14,9 +14,11 @@ urlpatterns = [
     url(r'^notificationList/all/$', views.NotificationListView.as_view(), name='notification_list_view_all'),
     url(r'^notificationList/unread/$', views.NotificationListView.as_view(), name='notification_list_view_unread'),
 
-    url(r'^notificationList/mark-as-read/(?P<slug>\d+)/$', views.notification_mark_as_read, name='mark_as_read'),
-    url(r'^notificationList/mark-as-unread/(?P<slug>\d+)/$', views.notification_mark_as_unread, name='mark_as_unread'),
-    url(r'^notificationList/delete/(?P<slug>\d+)/$', views.notification_delete, name='delete'),
+    url(r'^notificationList/mark-as-read/(?P<slug>\d+)/$', views.NotificationListViewMarkAsRead.as_view(),
+        name='mark_as_read'),
+    url(r'^notificationList/mark-as-unread/(?P<slug>\d+)/$', views.NotificationListViewMarkAsUnread.as_view(),
+        name='mark_as_unread'),
+    url(r'^notificationList/delete/(?P<slug>\d+)/$', views.NotificationListViewDelete.as_view(), name='delete'),
 
     url(r'^charityList$', views.CharityListView.as_view(), name='charity_list_view'),
 
