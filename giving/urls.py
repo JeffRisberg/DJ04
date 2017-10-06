@@ -40,6 +40,14 @@ urlpatterns = [
         views.NotificationsAPIView.as_view(),
         name='notifications'),
 
+    url(r'^api/charity/(?P<pk>[0-9]+)/$',
+        views.CharityAPIView.as_view(),
+        name='charity'),
+
+    url(r'^api/charities/$',
+        views.CharitiesAPIView.as_view(),
+        name='charities'),
+
     url(r'^api/donation/(?P<pk>[0-9]+)/$',
         views.DonationAPIView.as_view(),
         name='donation'),

@@ -220,6 +220,20 @@ class NotificationsAPIView(ListAPIView):
     serializer_class = NotificationSerializer
 
 
+class CharityAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CharitySerializer
+
+    def get_object(self):
+        return Charity.objects.get(id=self.kwargs['pk'])
+
+
+class CharitiesAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Charity.objects.all()
+    serializer_class = CharitySerializer
+
+
 class DonationAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = DonationSerializer
