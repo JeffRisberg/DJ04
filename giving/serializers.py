@@ -9,12 +9,13 @@ class ActorSerializer(serializers.RelatedField):
     """
         A custom field to use for the `tagged_object` generic relationship.
         """
+
     def to_representation(self, value):
         """
         Serialize instances with specific serializer.
         """
         if isinstance(value, User):
-            serializer = UserSerializer(value)
+            serializer = UserSerializer(value, context=self.context)
         else:
             raise Exception('Unexpected type of tagged object')
 
@@ -72,6 +73,7 @@ class TaggedObjectRelatedField(serializers.RelatedField):
     """
     A custom field to use for the `tagged_object` generic relationship.
     """
+
     def to_representation(self, value):
         """
         Serialize instances with specific serializer.
