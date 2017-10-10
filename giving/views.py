@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.core.context_processors import csrf
-from django.http.response import HttpResponse
+from django.http.response import Http404, HttpResponse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import Context, loader
 from django.views.generic import TemplateView, ListView, RedirectView
@@ -211,7 +211,7 @@ class NotificationAPIView(RetrieveAPIView):
     serializer_class = NotificationSerializer
 
     def get_object(self):
-        return Notification.objects.get(id=self.kwargs['pk'])
+        return get_object_or_404(Notification, id=self.kwargs['pk'])
 
 
 class NotificationsAPIView(ListAPIView):

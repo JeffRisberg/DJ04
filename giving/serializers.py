@@ -7,8 +7,8 @@ from .models import TaggedItem, Charity, Donor, Donation
 
 class ActorSerializer(serializers.RelatedField):
     """
-        A custom field to use for the `tagged_object` generic relationship.
-        """
+    A custom field to use for the `tagged_object` generic relationship.
+    """
 
     def to_representation(self, value):
         """
@@ -22,7 +22,7 @@ class ActorSerializer(serializers.RelatedField):
         return serializer.data
 
 
-class NotificationSerializer(serializers.Serializer):
+class NotificationSerializer(serializers.ModelSerializer):
     actor = ActorSerializer(read_only=True)
 
     class Meta:
