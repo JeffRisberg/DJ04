@@ -7,8 +7,11 @@ from django.template import Context, loader
 from django.views.generic import TemplateView, ListView, RedirectView
 from django.utils.decorators import method_decorator
 
+import django_filters.rest_framework
+
 from notifications.models import Notification
 from notifications.signals import notify
+
 from rest_framework import viewsets
 from rest_framework.generics import (
     ListAPIView, RetrieveAPIView
@@ -22,6 +25,8 @@ from .serializers import \
     UserSerializer, GroupSerializer, \
     CharitySerializer, DonationSerializer, NotificationSerializer, \
     TaggedItemSerializer
+
+from filters import NotificationFilter
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -218,6 +223,8 @@ class NotificationsAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_class = NotificationFilter
 
 
 class CharityAPIView(RetrieveAPIView):
