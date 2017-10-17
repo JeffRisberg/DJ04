@@ -61,11 +61,8 @@ class DonationViewSet(viewsets.ModelViewSet):
     serializer_class = DonationSerializer
 
 
-def index(request):
-    template = loader.get_template('giving/home.html')
-    context = Context()
-    output = template.render(context)
-    return HttpResponse(output)
+class IndexView(TemplateView):
+    template_name = 'giving/home.html'
 
 
 class NotificationListView(ListView):

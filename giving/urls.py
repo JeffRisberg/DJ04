@@ -60,5 +60,5 @@ urlpatterns = [
         views.TaggedItemsAPIView.as_view(),
         name='taggedItems'),
 
-    url(r'^$', views.index, name='home'),
+    url(r'^$', views.IndexView.as_view(), name='home'),
 ]
